@@ -31,15 +31,18 @@ go run upload-to-s3.go \
   --aws_bucket="kdavis-bucket" \
   --aws_bucket_key="data/bulk-loader-example-opencypher-format/node-olist-orders.csv"
 
-```
-
-
-```
-cd ./src/go/neptune-database-load
 go run create-relationship-customer-order.go
-```
+
+go run upload-to-s3.go \
+  --source="${NEPTUNE_PROJECT_HOME}/data/bulk-loader-example-opencypher-format/node-olist-orders.csv" \
+  --aws_config="317913635185_cldr_poweruser" \
+  --aws_region="us-east-2" \
+  --aws_bucket="kdavis-bucket" \
+  --aws_bucket_key="data/bulk-loader-example-opencypher-format/relationship-customer-to-order.csv"
 
 ```
+```
+cd ${NEPTUNE_PROJECT_HOME}
 ./scripts/load-to-neptune.sh "kdavis-bucket" "data/bulk-loader-example-opencypher-format/node-olist-customers.csv"
 ./scripts/load-to-neptune.sh "kdavis-bucket" "data/bulk-loader-example-opencypher-format/node-olist-orders.csv"
 ./scripts/load-to-neptune.sh "kdavis-bucket" "data/bulk-loader-example-opencypher-format/relationship-customer-to-order.csv"
