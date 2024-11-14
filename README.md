@@ -1,4 +1,4 @@
-# neo4j_neptune_aws_reinvent
+# neptune_aws_reinvent
 
 ```
 cd $HOME
