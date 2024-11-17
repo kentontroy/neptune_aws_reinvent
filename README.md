@@ -1,4 +1,4 @@
-# neptune_aws_reinvent
+k# neptune_aws_reinvent
 
 ```
 cd $HOME
@@ -41,7 +41,7 @@ go run upload-to-s3.go \
   --aws_config="${AWS_CONFIG}" \
   --aws_region="${AWS_REGION}" \
   --aws_bucket="${AWS_BUCKET}" \
-  --aws_bucket_key="${AWS_BUCKET_KEY_DIR}/data/bulk-loader-example-opencypher-format/node-olist-orders.csv"
+  --aws_bucket_key="${AWS_BUCKET_KEY_DIR}/node-olist-orders.csv"
 
 go run create-relationship-customer-order.go
 
@@ -56,7 +56,7 @@ go run upload-to-s3.go \
 
 ```
 cd ${NEPTUNE_PROJECT_HOME}/scripts
-./load-to-neptune.sh "kdavis-bucket" "data/bulk-loader-example-opencypher-format/node-olist-customers.csv"
-./load-to-neptune.sh "kdavis-bucket" "data/bulk-loader-example-opencypher-format/node-olist-orders.csv"
-./load-to-neptune.sh "kdavis-bucket" "data/bulk-loader-example-opencypher-format/relationship-customer-to-order.csv"
+./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/node-olist-customers.csv"
+./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/node-olist-orders.csv"
+./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/relationship-customer-to-order.csv"
 ```
