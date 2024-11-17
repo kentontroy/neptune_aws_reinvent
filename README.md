@@ -1,4 +1,4 @@
-k# neptune_aws_reinvent
+# neptune_aws_reinvent
 
 ```
 cd $HOME
