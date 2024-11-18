@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export AWS_NEPTUNE_ENDPOINT="db-neptune-aws-reinvent.cluster-cmabrddbmjfm.us-east-2.neptune.amazonaws.com"
-export AWS_NEPTUNE_ENDPOINT_PORT=8182
 export TOKEN_FROM_INITIATING_CLEAR="92c968e8-bbed-6c8e-f1b5-55e9ce114dfe"
 
 ##############################################################################################
