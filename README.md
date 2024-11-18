@@ -66,6 +66,13 @@ go run upload-to-s3.go \
   --aws_bucket="${AWS_BUCKET}" \
   --aws_bucket_key="${AWS_BUCKET_KEY_DIR}/node-olist-products.csv"
 
+go run upload-to-s3.go \
+  --source="${NEPTUNE_LOADER_FILE_DIR}/relationship-order-to-product.csv" \
+  --aws_config="${AWS_CONFIG}" \
+  --aws_region="${AWS_REGION}" \
+  --aws_bucket="${AWS_BUCKET}" \
+  --aws_bucket_key="${AWS_BUCKET_KEY_DIR}/relationship-order-to-product.csv"
+
 ```
 
 ```
@@ -75,5 +82,6 @@ cd ${NEPTUNE_PROJECT_HOME}/scripts
 ./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/node-olist-orders.csv"
 ./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/relationship-customer-to-order.csv"
 ./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/node-olist-products.csv"
+./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/relationship-order-to-product"
 
 ```
