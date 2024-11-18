@@ -1,6 +1,10 @@
 #!/bin/bash
 
-export TOKEN_FROM_INITIATING_CLEAR="92c968e8-bbed-6c8e-f1b5-55e9ce114dfe"
+# Check if the token produced as output from the initiate_clear_graph.sh script was passed in
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <token>"
+    exit 1
+fi
 
 ##############################################################################################
 # References
@@ -12,5 +16,5 @@ curl -X POST \
       https://${AWS_NEPTUNE_ENDPOINT}:${AWS_NEPTUNE_ENDPOINT_PORT}/system \
   -d '{
         "action" : "performDatabaseReset",
-        "token" : "'"${TOKEN_FROM_INITIATING_CLEAR}"'"
+        "token" : "'"$1"'"
       }'
