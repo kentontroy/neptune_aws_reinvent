@@ -69,6 +69,7 @@ go run upload-to-s3.go \
 ```
 
 ```
+chmod -R 755 ${NEPTUNE_PROJECT_HOME}/scripts
 cd ${NEPTUNE_PROJECT_HOME}/scripts
 ./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/node-olist-customers.csv"
 ./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/node-olist-orders.csv"
