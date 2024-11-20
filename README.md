@@ -85,3 +85,19 @@ cd ${NEPTUNE_PROJECT_HOME}/scripts
 ./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/relationship-order-to-product"
 
 ```
+
+```
+MATCH (c:customer)-[:ordered]->(o:order)-[r:has_item]->(p:product)
+WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_amount
+ORDER BY purchase_amount DESC
+LIMIT 50
+WITH COLLECT(customer_id) AS top_customers
+
+UNWIND top_customers AS customer_id
+MATCH (c:customer {customer_id: customer_id})-[i:ordered]->(o:order)-[r:has_item]->(p:product)
+RETURN customer_id, 
+    COLLECT({
+        year: i.order_purchase_timestamp_year, month: i.order_purchase_timestamp_month, 
+        product: p.product_category_name, amount: ROUND(r.price * 100) / 100
+    }) AS purchased_items
+```
