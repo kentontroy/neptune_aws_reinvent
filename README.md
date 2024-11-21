@@ -108,6 +108,7 @@ ORDER BY purchase_amount DESC
 LIMIT 50
 WITH COLLECT(customer_id) AS top_customers
 UNWIND top_customers AS customer_id
+
 MATCH (c:customer {customer_id: customer_id})-[i:ordered]->(o:order)-[r:has_item]->(p:product)
 RETURN customer_id, 
     COLLECT({
