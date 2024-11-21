@@ -168,5 +168,18 @@ SET l.average_purchase_amount = avg_purchase_amount, l.stddev_purchase_amount = 
 RETURN l
 ```
 
+```
+MATCH (c:top_customer)-[:placed]->(o:order)-[r:has_item]->(p:product), (l:lifetime_rewards_variable)
+WITH l, c, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
+RETURN
+CASE 
+    WHEN purchase_amount > l.average_purchase_amount + (2 * l.stddev_purchase_amount) THEN "Diamond"
+    WHEN purchase_amount > l.average_purchase_amount + l.stddev_purchase_amount THEN "Gold"
+    WHEN purchase_amount >= l.average_purchase_amount THEN "Silver"
+    ELSE "Member"
+END AS tier
+
+```
+
 
 
