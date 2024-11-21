@@ -117,7 +117,32 @@ RETURN customer_id,
 ```
 
 ```
+MATCH (o:order)-[r:has_item]->(p:product)
+WITH o.order_id AS order_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
+WITH AVG(purchase_amount) AS avg_purchase_amount, STDEVP(purchase_amount) AS stddev_purchase_amount
+
+MATCH (c:customer)-[:ordered]->(o:order)-[r:has_item]->(p:product)
+WITH avg_purchase_amount, stddev_purchase_amount, c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
+RETURN
+CASE 
+    WHEN purchase_amount > avg_purchase_amount + (2 * stddev_purchase_amount) THEN "Diamond"
+    WHEN purchase_amount > avg_purchase_amount + stddev_purchase_amount THEN "Gold"
+    WHEN purchase_amount >= avg_purchase_amount THEN "Silver"
+    ELSE "Member"
+END AS tier
+LIMIT 30
+```
+
+
+```
 MATCH (c:customer), (g:geolocation)
 WHERE c.geolocation_zip_code_prefix = g.geolocation_zip_code_prefix
 MERGE (c)-[:located_at]->(g)
+
+{
+  "detailedMessage": "Operation terminated (out of memory)",
+  "code": "MemoryLimitExceededException",
+  "requestId": "7d2e5760-7114-4c69-ad0d-02f52aa74019",
+  "message": "Operation terminated (out of memory)"
+}
 ```
