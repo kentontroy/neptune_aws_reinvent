@@ -109,12 +109,41 @@ LIMIT 50
 WITH COLLECT(customer_id) AS top_customers
 UNWIND top_customers AS customer_id
 
-MATCH (c:customer {customer_id: customer_id})-[i:ordered]->(o:order)-[r:has_item]->(p:product)
-RETURN customer_id, 
+MERGE (t:top_customer {customer_id: customer_id})
+```
+
+```
+MATCH (c:top_customer), (o:order)
+WHERE c.customer_id = o.customer_id
+MERGE (c)-[:placed]->(o)
+RETURN c, o
+```
+
+```
+MATCH (c:top_customer)-[i:placed]->(o:order)-[r:has_item]->(p:product)
+RETURN c.customer_id, 
     COLLECT({
         year: i.order_purchase_timestamp_year, month: i.order_purchase_timestamp_month, 
         product: p.product_category_name, amount: ROUND(r.price * 100) / 100
     }) AS purchased_items
+```
+
+```
+MATCH (c:customer)
+WITH c, rand() AS randomValue
+ORDER BY randomValue
+LIMIT 50
+WITH COLLECT(c.customer_id) AS sample_customers
+UNWIND sample_customers AS customer_id
+
+MERGE (s:sample_customer {customer_id: customer_id})
+```
+
+```
+MATCH (c:sample_customer), (o:order)
+WHERE c.customer_id = o.customer_id
+MERGE (c)-[:placed]->(o)
+RETURN c, o
 ```
 
 ```
@@ -129,7 +158,7 @@ MATCH (o:order)-[r:has_item]->(p:product)
 WITH o.order_id AS order_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
 WITH AVG(purchase_amount) AS avg_purchase_amount, STDEVP(purchase_amount) AS stddev_purchase_amount
 
-MATCH (c:customer)-[:ordered]->(o:order)-[r:has_item]->(p:product)
+MATCH (c:top_customer)-[:ordered]->(o:order)-[r:has_item]->(p:product)
 WITH avg_purchase_amount, stddev_purchase_amount, c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
 RETURN
 CASE 
