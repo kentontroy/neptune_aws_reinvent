@@ -27,7 +27,11 @@ export NEPTUNE_LOADER_FILE_DIR=${NEPTUNE_PROJECT_HOME}/data/bulk-loader-example-
 ```
 
 ```
-cd ./src/neptune-database-load/go
+cd ${NEPTUNE_LOADER_FILE_DIR}
+gunzip node-olist-geolocation.csv.gz
+```
+
+cd ${NEPTUNE_PROJECT_HOME}/src/neptune-database-load/go
 
 go run upload-to-s3.go \
   --source="${NEPTUNE_LOADER_FILE_DIR}/node-olist-customers.csv" \
@@ -99,7 +103,6 @@ WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_a
 ORDER BY purchase_amount DESC
 LIMIT 50
 WITH COLLECT(customer_id) AS top_customers
-
 UNWIND top_customers AS customer_id
 MATCH (c:customer {customer_id: customer_id})-[i:ordered]->(o:order)-[r:has_item]->(p:product)
 RETURN customer_id, 
@@ -107,4 +110,10 @@ RETURN customer_id,
         year: i.order_purchase_timestamp_year, month: i.order_purchase_timestamp_month, 
         product: p.product_category_name, amount: ROUND(r.price * 100) / 100
     }) AS purchased_items
+```
+
+```
+MATCH (c:customer), (g:geolocation)
+WHERE c.geolocation_zip_code_prefix = g.geolocation_zip_code_prefix
+MERGE (c)-[:located_at]->(g)
 ```
