@@ -10,7 +10,6 @@ go version
 ```
 ### Set environment variables
 ```
-037356316600_cldr_poweruser
 export AWS_CONFIG=317913635185_cldr_poweruser
 export AWS_REGION=us-east-2
 export AWS_BUCKET=kdavis-bucket
