@@ -31,6 +31,7 @@ cd ${NEPTUNE_LOADER_FILE_DIR}
 gunzip node-olist-geolocation.csv.gz
 ```
 
+```
 cd ${NEPTUNE_PROJECT_HOME}/src/neptune-database-load/go
 
 go run upload-to-s3.go \
@@ -83,7 +84,6 @@ go run upload-to-s3.go \
   --aws_region="${AWS_REGION}" \
   --aws_bucket="${AWS_BUCKET}" \
   --aws_bucket_key="${AWS_BUCKET_KEY_DIR}/node-olist-geolocation.csv"
-
 ```
 
 ```
