@@ -118,6 +118,13 @@ RETURN customer_id,
 ```
 
 ```
+MERGE (:tier_diamond {name: "Diamond Tier", discount: "Free shipping on all orders and free lifetime warranty on applicable products"})
+MERGE (:tier_gold {name: "Gold Tier", discount: "Free shipping on orders above $100 and discounted warranty on applicable products"})
+MERGE (:tier_silver {name: "Silver Tier", discount: "Free shipping on orders above $200"})
+MERGE (:tier_member {name: "Member Tier"})
+```
+
+```
 MATCH (o:order)-[r:has_item]->(p:product)
 WITH o.order_id AS order_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
 WITH AVG(purchase_amount) AS avg_purchase_amount, STDEVP(purchase_amount) AS stddev_purchase_amount
@@ -133,7 +140,6 @@ CASE
 END AS tier
 LIMIT 30
 ```
-
 
 ```
 MATCH (c:customer), (g:geolocation)
