@@ -123,7 +123,6 @@ RETURN c, o
 MATCH (c:top_customer)-[i:placed]->(o:order)-[r:has_item]->(p:product)
 RETURN c.customer_id, 
     COLLECT({
-        year: i.order_purchase_timestamp_year, month: i.order_purchase_timestamp_month, 
         product: p.product_category_name, amount: ROUND(r.price * 100) / 100
     }) AS purchased_items
 ```
