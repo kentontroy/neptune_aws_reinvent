@@ -1,9 +1,6 @@
 # neptune_aws_reinvent
 
-```
-Navigate to the Neptune Cluster just provisioned. Create a notebook that can be used to access the graph database.
-```
-
+### Install Golang
 ```
 cd $HOME
 wget -c https://go.dev/dl/go1.23.1.linux-amd64.tar.gz
@@ -11,7 +8,7 @@ sudo tar -C /usr/local/ -xzf go1.23.1.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 go version
 ```
-
+### Set environment variables
 ```
 export AWS_CONFIG=317913635185_cldr_poweruser
 export AWS_REGION=us-east-2
@@ -22,7 +19,7 @@ export AWS_NEPTUNE_ENDPOINT="db-neptune-aws-reinvent.cluster-cmabrddbmjfm.us-eas
 export AWS_NEPTUNE_ENDPOINT_PORT=8182
 export AWS_NEPTUNE_ARN="arn:aws:iam::317913635185:role/NeptuneLoadFromS3"
 ```
-
+### Clone gitrepo
 ```
 git clone https://github.com/kentontroy/neptune_aws_reinvent
 cd neptune_aws_reinvent
@@ -30,11 +27,14 @@ export NEPTUNE_PROJECT_HOME=$PWD
 export NEPTUNE_LOADER_FILE_DIR=${NEPTUNE_PROJECT_HOME}/data/bulk-loader-example-opencypher-format
 ```
 
+### Extract geolocation dataset
 ```
 cd ${NEPTUNE_LOADER_FILE_DIR}
 gunzip node-olist-geolocation.csv.gz
 ```
 
+### Upload data sets to S3. Create relationship between entities using custom code.
+### The datasets are formatted according to the Cypher bulk-loading specification
 ```
 cd ${NEPTUNE_PROJECT_HOME}/src/neptune-database-load/go
 
@@ -90,6 +90,7 @@ go run upload-to-s3.go \
   --aws_bucket_key="${AWS_BUCKET_KEY_DIR}/node-olist-geolocation.csv"
 ```
 
+### Load the datasets from S3 into Neptune. 
 ```
 chmod -R 755 ${NEPTUNE_PROJECT_HOME}/scripts
 cd ${NEPTUNE_PROJECT_HOME}/scripts
@@ -101,6 +102,7 @@ cd ${NEPTUNE_PROJECT_HOME}/scripts
 ./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/node-olist-geolocation.csv"
 ```
 
+### Identify the top 50 customers by purchase amount
 ```
 MATCH (c:customer)-[:ordered]->(o:order)-[r:has_item]->(p:product)
 WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_amount
@@ -119,6 +121,7 @@ MERGE (c)-[:placed]->(o)
 RETURN c, o
 ```
 
+### List what products those top 50 customers have purchased
 ```
 MATCH (c:top_customer)-[i:placed]->(o:order)-[r:has_item]->(p:product)
 RETURN c.customer_id, 
@@ -127,6 +130,7 @@ RETURN c.customer_id,
     }) AS purchased_items
 ```
 
+### Create a random sample of 50 customers
 ```
 MATCH (c:customer)
 WITH c, rand() AS randomValue
@@ -145,6 +149,7 @@ MERGE (c)-[:placed]->(o)
 RETURN c, o
 ```
 
+### Create a Rewards Tier with specified discounts
 ```
 MERGE (:tier_diamond {name: "Diamond Tier", discount: "Free shipping on all orders and free lifetime warranty on applicable products"})
 MERGE (:tier_gold {name: "Gold Tier", discount: "Free shipping on orders above $100 and discounted warranty on applicable products"})
@@ -152,32 +157,16 @@ MERGE (:tier_silver {name: "Silver Tier", discount: "Free shipping on orders abo
 MERGE (:tier_member {name: "Member Tier"})
 ```
 
+### Calculate the variables used to map Customers to the Rewards Tier level
 ```
 MATCH (o:order)-[r:has_item]->(p:product)
 WITH o.order_id AS order_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
 WITH AVG(purchase_amount) AS avg_purchase_amount, STDEVP(purchase_amount) AS stddev_purchase_amount
 
-MATCH (c:top_customer)-[:ordered]->(o:order)-[r:has_item]->(p:product)
-WITH avg_purchase_amount, stddev_purchase_amount, c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
-RETURN
-CASE 
-    WHEN purchase_amount > avg_purchase_amount + (2 * stddev_purchase_amount) THEN "Diamond"
-    WHEN purchase_amount > avg_purchase_amount + stddev_purchase_amount THEN "Gold"
-    WHEN purchase_amount >= avg_purchase_amount THEN "Silver"
-    ELSE "Member"
-END AS tier
-LIMIT 30
+MERGE (l:lifetime_rewards_variable)
+SET l.average_purchase_amount = avg_purchase_amount, l.stddev_purchase_amount = stddev_purchase_amount
+RETURN l
 ```
 
-```
-MATCH (c:customer), (g:geolocation)
-WHERE c.geolocation_zip_code_prefix = g.geolocation_zip_code_prefix
-MERGE (c)-[:located_at]->(g)
 
-{
-  "detailedMessage": "Operation terminated (out of memory)",
-  "code": "MemoryLimitExceededException",
-  "requestId": "7d2e5760-7114-4c69-ad0d-02f52aa74019",
-  "message": "Operation terminated (out of memory)"
-}
-```
+
