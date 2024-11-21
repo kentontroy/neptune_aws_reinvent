@@ -1,6 +1,10 @@
 # neptune_aws_reinvent
 
 ```
+Navigate to the Neptune Cluster just provisioned. Create a notebook that can be used to access the graph database.
+```
+
+```
 cd $HOME
 wget -c https://go.dev/dl/go1.23.1.linux-amd64.tar.gz
 sudo tar -C /usr/local/ -xzf go1.23.1.linux-amd64.tar.gz
