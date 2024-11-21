@@ -10,12 +10,13 @@ go version
 ```
 ### Set environment variables
 ```
+037356316600_cldr_poweruser
 export AWS_CONFIG=317913635185_cldr_poweruser
 export AWS_REGION=us-east-2
 export AWS_BUCKET=kdavis-bucket
 export AWS_BUCKET_KEY_DIR=data/bulk-loader-example-opencypher-format
 export AWS_NEPTUNE_LOADER_FORMAT="opencypher"
-export AWS_NEPTUNE_ENDPOINT="db-neptune-aws-reinvent.cluster-cmabrddbmjfm.us-east-2.neptune.amazonaws.com"
+export AWS_NEPTUNE_ENDPOINT=reinvent-db-neptune-1.cluster-cnlncb8narog.us-east-2.neptune.amazonaws.com
 export AWS_NEPTUNE_ENDPOINT_PORT=8182
 export AWS_NEPTUNE_ARN="arn:aws:iam::317913635185:role/NeptuneLoadFromS3"
 ```
