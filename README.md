@@ -34,7 +34,7 @@ pyenv install 3.10.14
 pyenv virtualenv 3.10.14 venv
 pyenv activate venv
 
-
+pip install neo4j pandas mlxtend==0.23.1
 
 ```
 
