@@ -87,7 +87,18 @@ def getPromotionsForAllTiers()->Dict[str, str]:
 
     return promotions
 
+def getPromotionsForCustomerId(customer_id: str)->str:
+    try:
+        tier = getTierForCustomerId(customer_id)
+        all_promotions: {} = getPromotionsForAllTiers()
+        promotions = all_promotions[tier.lower()]
+        return promotions
+
+    except Exception as e:
+        raise Exception(f"A Neptune error occurred in getPromotionsForCustomerId: {e}")
+
 if __name__ == "__main__":
+# Execute all APIs to test
     customer_ids = getSampleCustomerIds()
     logger.info(customer_ids)
 
@@ -99,3 +110,7 @@ if __name__ == "__main__":
 
     promotions = getPromotionsForAllTiers()
     logger.info(promotions)
+
+    promotions = getPromotionsForCustomerId(random.choice(customer_ids))
+    logger.info(promotions)
+

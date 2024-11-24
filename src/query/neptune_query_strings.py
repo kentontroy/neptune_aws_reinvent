@@ -36,3 +36,8 @@ MATCH (s:tier_silver)
 MATCH (m:tier_member)
 RETURN d.discount AS diamond, g.discount AS gold, s.discount AS silver, "" AS member
 """
+
+GET_ORDER_ITEMS="""
+MATCH (o:order)-[r:has_item]->(p:product)
+RETURN o.order_id AS order_id, p.product_category_name as product_category_name
+"""
