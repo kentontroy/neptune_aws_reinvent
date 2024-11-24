@@ -15,7 +15,7 @@ CASE
 END AS tier
 """
 
-GET_TIERS_FOR_ALL_SAMPLE="""
+GET_TIERS_FOR_ALL_SAMPLES="""
 MATCH (c:demo_set_customer)-[:placed]->(o)-[r:has_item]->(p:product), 
     (l:lifetime_rewards_variable)
 WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_amount, l
