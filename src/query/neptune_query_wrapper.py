@@ -57,7 +57,7 @@ def getTiersForAllSampleCustomers()->Dict[str, str]:
         with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD), encrypted=True) as driver:
             driver.verify_connectivity()
             drs = driver.session()
-            res = drs.run(q_strings.GET_TIERS_FOR_ALL_SAMPLE)
+            res = drs.run(q_strings.GET_TIERS_FOR_ALL_SAMPLES)
             for rec in res:
                 tiers[rec["customer_id"]] = rec["tier"]
             drs.close()
