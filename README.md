@@ -151,7 +151,24 @@ SET l.average_purchase_amount = avg_purchase_amount, l.stddev_purchase_amount = 
 RETURN l
 ```
 
-#### See the example.cypher.md in this repo on how to create a random sample of customers for demo purposes
+#### Create a random sample of customers for demo purposes
+```
+MATCH (c:customer)
+WITH c, rand() AS randomValue
+ORDER BY randomValue
+LIMIT 50
+WITH COLLECT(c.customer_id) AS sample_customers
+UNWIND sample_customers AS customer_id
+
+MERGE (s:sample_customer {customer_id: customer_id})
+```
+
+```
+MATCH (c:sample_customer), (o:order)
+WHERE c.customer_id = o.customer_id
+MERGE (c)-[:placed]->(o)
+RETURN c, o
+```
 ```
 %%oc
 
