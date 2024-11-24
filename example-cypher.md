@@ -44,3 +44,17 @@ WHERE c.customer_id = o.customer_id
 MERGE (c)-[:placed]->(o)
 RETURN c, o
 ```
+
+#### Query what tier a sample customer belongs to based upon the lifetime_rewards_variable components
+```
+MATCH (c:sample_customer)-[:placed]->(o:order)-[r:has_item]->(p:product), (l:lifetime_rewards_variable)
+WITH l, c, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
+RETURN
+CASE 
+    WHEN purchase_amount > l.average_purchase_amount + (2 * l.stddev_purchase_amount) THEN "Diamond"
+    WHEN purchase_amount > l.average_purchase_amount + l.stddev_purchase_amount THEN "Gold"
+    WHEN purchase_amount >= l.average_purchase_amount THEN "Silver"
+    ELSE "Member"
+END AS tier
+
+```
