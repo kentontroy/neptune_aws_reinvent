@@ -26,25 +26,6 @@ RETURN c.customer_id,
     }) AS purchased_items
 ```
 
-#### Create a random sample of 50 customers
-```
-MATCH (c:customer)
-WITH c, rand() AS randomValue
-ORDER BY randomValue
-LIMIT 50
-WITH COLLECT(c.customer_id) AS sample_customers
-UNWIND sample_customers AS customer_id
-
-MERGE (s:sample_customer {customer_id: customer_id})
-```
-
-```
-MATCH (c:sample_customer), (o:order)
-WHERE c.customer_id = o.customer_id
-MERGE (c)-[:placed]->(o)
-RETURN c, o
-```
-
 #### Query what tier a sample customer belongs to based upon the lifetime_rewards_variable components
 ```
 MATCH (c:sample_customer)-[:placed]->(o:order)-[r:has_item]->(p:product), (l:lifetime_rewards_variable)
