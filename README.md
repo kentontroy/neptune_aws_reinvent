@@ -152,7 +152,7 @@ RETURN l
 ```
 
 ```
-MATCH (c:top_customer)-[:placed]->(o:order)-[r:has_item]->(p:product), (l:lifetime_rewards_variable)
+MATCH (c:customer)-[:placed]->(o:order)-[r:has_item]->(p:product), (l:lifetime_rewards_variable)
 WITH l, c, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
 RETURN
 CASE 
