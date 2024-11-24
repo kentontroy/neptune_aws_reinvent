@@ -64,7 +64,7 @@ gunzip node-olist-geolocation.csv.gz
 ```
 
 #### Upload data sets to S3. Create relationship between entities using custom code.
-##### The datasets are formatted according to the Cypher bulk-loading specification
+The datasets are formatted according to the Cypher bulk-loading specification
 ```
 cd ${NEPTUNE_PROJECT_HOME}/src/neptune-database-load/go
 
