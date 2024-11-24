@@ -57,7 +57,7 @@ def getTiersForAllSampleCustomers()->Dict[str, str]:
         with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD), encrypted=True) as driver:
             driver.verify_connectivity()
             drs = driver.session()
-            res = drs.run(q_strings.GET_TIERS_FOR_ALL_SAMPLES)
+            res = drs.run(q_strings.GET_TIERS_FOR_ALL_SAMPLE)
             for rec in res:
                 tiers[rec["customer_id"]] = rec["tier"]
             drs.close()
@@ -66,6 +66,26 @@ def getTiersForAllSampleCustomers()->Dict[str, str]:
         raise Exception(f"A Neptune error occurred in getTiersForAllSampleCustomers: {e}")
 
     return tiers
+
+def getPromotionsForAllTiers()->Dict[str, str]:
+    promotions = {}
+    try:
+        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD), encrypted=True) as driver:
+            driver.verify_connectivity()
+            drs = driver.session()
+            res = drs.run(q_strings.GET_PROMOTIONS_FOR_ALL_TIERS)
+            for rec in res:
+                promotions["diamond"] = rec["diamond"]
+                promotions["gold"] = rec["gold"]
+                promotions["silver"] = rec["silver"]
+                promotions["member"] = rec["member"]
+                break
+            drs.close()
+
+    except Exception as e:
+        raise Exception(f"A Neptune error occurred in getPromotionsForAllTiers: {e}")
+
+    return promotions
 
 if __name__ == "__main__":
     customer_ids = getSampleCustomerIds()
@@ -77,3 +97,5 @@ if __name__ == "__main__":
     tiers = getTiersForAllSampleCustomers()
     logger.info(tiers)
 
+    promotions = getPromotionsForAllTiers()
+    logger.info(promotions)

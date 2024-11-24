@@ -15,7 +15,7 @@ CASE
 END AS tier
 """
 
-GET_TIERS_FOR_ALL_SAMPLES="""
+GET_TIERS_FOR_ALL_SAMPLE="""
 MATCH (c:demo_set_customer)-[:placed]->(o)-[r:has_item]->(p:product), 
     (l:lifetime_rewards_variable)
 WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_amount, l
@@ -27,4 +27,12 @@ CASE
     WHEN purchase_amount >= l.average_purchase_amount THEN "Silver"
     ELSE "Member"
 END AS tier
+"""
+
+GET_PROMOTIONS_FOR_ALL_TIERS="""
+MATCH (d:tier_diamond)
+MATCH (g:tier_gold)
+MATCH (s:tier_silver)
+MATCH (m:tier_member)
+RETURN d.discount AS diamond, g.discount AS gold, s.discount AS silver, "" AS member
 """
