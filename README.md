@@ -1,6 +1,6 @@
 # neptune_aws_reinvent
 
-### Install Golang
+#### Install Golang
 ```
 cd $HOME
 wget -c https://go.dev/dl/go1.23.1.linux-amd64.tar.gz
@@ -9,7 +9,7 @@ export PATH=$PATH:/usr/local/go/bin
 go version
 ```
 
-### Install pyvenv on Ubuntu
+#### Install pyvenv on Ubuntu
 ```
 sudo apt install -y make build-essential wget curl
 sudo apt install -y libssl-dev
@@ -38,7 +38,7 @@ pip install neo4j pandas mlxtend==0.23.1
 
 ```
 
-### Set environment variables
+#### Set environment variables
 ```
 export AWS_CONFIG=317913635185_cldr_poweruser
 export AWS_REGION=us-east-2
@@ -49,7 +49,7 @@ export AWS_NEPTUNE_ENDPOINT=reinvent-db-neptune-1.cluster-cnlncb8narog.us-east-2
 export AWS_NEPTUNE_ENDPOINT_PORT=8182
 export AWS_NEPTUNE_ARN="arn:aws:iam::317913635185:role/NeptuneLoadFromS3"
 ```
-### Clone gitrepo
+#### Clone gitrepo
 ```
 git clone https://github.com/kentontroy/neptune_aws_reinvent
 cd neptune_aws_reinvent
@@ -57,14 +57,14 @@ export NEPTUNE_PROJECT_HOME=$PWD
 export NEPTUNE_LOADER_FILE_DIR=${NEPTUNE_PROJECT_HOME}/data/bulk-loader-example-opencypher-format
 ```
 
-### Extract geolocation dataset
+#### Extract geolocation dataset
 ```
 cd ${NEPTUNE_LOADER_FILE_DIR}
 gunzip node-olist-geolocation.csv.gz
 ```
 
-### Upload data sets to S3. Create relationship between entities using custom code.
-### The datasets are formatted according to the Cypher bulk-loading specification
+#### Upload data sets to S3. Create relationship between entities using custom code.
+#### The datasets are formatted according to the Cypher bulk-loading specification
 ```
 cd ${NEPTUNE_PROJECT_HOME}/src/neptune-database-load/go
 
@@ -120,7 +120,7 @@ go run upload-to-s3.go \
   --aws_bucket_key="${AWS_BUCKET_KEY_DIR}/node-olist-geolocation.csv"
 ```
 
-### Load the datasets from S3 into Neptune. 
+#### Load the datasets from S3 into Neptune. 
 ```
 chmod -R 755 ${NEPTUNE_PROJECT_HOME}/scripts
 cd ${NEPTUNE_PROJECT_HOME}/scripts
@@ -132,7 +132,7 @@ cd ${NEPTUNE_PROJECT_HOME}/scripts
 ./load-to-neptune.sh "${AWS_BUCKET}" "${AWS_BUCKET_KEY_DIR}/node-olist-geolocation.csv"
 ```
 
-### Identify the top 50 customers by purchase amount
+#### Identify the top 50 customers by purchase amount
 ```
 MATCH (c:customer)-[:ordered]->(o:order)-[r:has_item]->(p:product)
 WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_amount
@@ -151,7 +151,7 @@ MERGE (c)-[:placed]->(o)
 RETURN c, o
 ```
 
-### List what products those top 50 customers have purchased
+#### List what products those top 50 customers have purchased
 ```
 MATCH (c:top_customer)-[i:placed]->(o:order)-[r:has_item]->(p:product)
 RETURN c.customer_id, 
@@ -160,7 +160,7 @@ RETURN c.customer_id,
     }) AS purchased_items
 ```
 
-### Create a random sample of 50 customers
+#### Create a random sample of 50 customers
 ```
 MATCH (c:customer)
 WITH c, rand() AS randomValue
@@ -179,7 +179,7 @@ MERGE (c)-[:placed]->(o)
 RETURN c, o
 ```
 
-### Create a Rewards Tier with specified discounts
+#### Create a Rewards Tier with specified discounts
 ```
 MERGE (:tier_diamond {name: "Diamond Tier", discount: "Free shipping on all orders and free lifetime warranty on applicable products"})
 MERGE (:tier_gold {name: "Gold Tier", discount: "Free shipping on orders above $100 and discounted warranty on applicable products"})
@@ -187,7 +187,7 @@ MERGE (:tier_silver {name: "Silver Tier", discount: "Free shipping on orders abo
 MERGE (:tier_member {name: "Member Tier"})
 ```
 
-### Calculate the variables used to map Customers to the Rewards Tier level
+#### Calculate the variables used to map Customers to the Rewards Tier level
 ```
 MATCH (o:order)-[r:has_item]->(p:product)
 WITH o.order_id AS order_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
