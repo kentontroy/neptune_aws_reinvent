@@ -8,6 +8,36 @@ sudo tar -C /usr/local/ -xzf go1.23.1.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 go version
 ```
+
+### Install pyvenv on Ubuntu
+```
+sudo apt install -y make build-essential wget curl
+sudo apt install -y libssl-dev
+sudo apt install -y zliblg-dev libbz2-dev
+sudo apt install -y libreadline-dev libsqlite3-dev
+sudo apt install -y llvm libncurses5-dev libncursesw5-dev
+sudo apt install -y xz-utils-dev tk-dev libffi-dev liblzms-dev python-openssl git
+sudo apt install -y liblzma-dev python-openssl git
+
+python3 -m pip install --upgrade pip
+
+sudo curl https://pyenv.run | bash
+cat $HOME/.bash_profile
+...
+# User specific environment and startup programs
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+pyenv install 3.10.14
+pyenv virtualenv 3.10.14 venv
+pyenv activate venv
+
+
+
+```
+
 ### Set environment variables
 ```
 export AWS_CONFIG=317913635185_cldr_poweruser
