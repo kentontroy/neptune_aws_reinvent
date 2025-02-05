@@ -134,10 +134,10 @@ cd ${NEPTUNE_PROJECT_HOME}/scripts
 
 #### Create a Rewards Tier with specified discounts
 ```
-MERGE (:tier_diamond {name: "Diamond Tier", discount: "Free shipping on all orders and free lifetime warranty on applicable products"})
-MERGE (:tier_gold {name: "Gold Tier", discount: "Free shipping on orders above $100 and discounted warranty on applicable products"})
-MERGE (:tier_silver {name: "Silver Tier", discount: "Free shipping on orders above $200"})
-MERGE (:tier_member {name: "Member Tier"})
+MERGE (:Tier_Diamond {name: "Diamond Tier", discount: "Free shipping on all orders and free lifetime warranty on applicable products"})
+MERGE (:Tier_Gold {name: "Gold Tier", discount: "Free shipping on orders above $100 and discounted warranty on applicable products"})
+MERGE (:Tier_Silver {name: "Silver Tier", discount: "Free shipping on orders above $200"})
+MERGE (:Tier_Member {name: "Member Tier"})
 ```
 
 #### Calculate the variables used to map Customers to the Rewards Tier level
